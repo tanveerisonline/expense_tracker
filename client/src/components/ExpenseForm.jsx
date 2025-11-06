@@ -63,7 +63,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
         </div>
         <div className="col-md-2">
           <label className="form-label">Amount</label>
-          <input type="number" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="0" step="0.01" required placeholder="0.00" />
+          <input type="number" inputMode="decimal" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="0" step="0.01" required placeholder="0.00" />
         </div>
         <div className="col-md-3">
           <label className="form-label">Date</label>
@@ -107,10 +107,10 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
           ))}
         </div>
       ) : null}
-      <div className="mt-3 d-flex gap-2">
-        <button className="btn btn-success" type="submit" disabled={loading}>{loading ? 'Saving...' : editingExpense ? 'Update' : 'Add'}</button>
+      <div className="mt-3 d-flex d-md-inline-flex w-100 gap-2">
+        <button className="btn btn-success flex-fill" type="submit" disabled={loading}>{loading ? 'Saving...' : editingExpense ? 'Update' : 'Add'}</button>
         {editingExpense && (
-          <button type="button" className="btn btn-secondary" onClick={() => {
+          <button type="button" className="btn btn-secondary flex-fill flex-md-grow-0" onClick={() => {
             setAmount('')
             setDate('')
             setDescription('')

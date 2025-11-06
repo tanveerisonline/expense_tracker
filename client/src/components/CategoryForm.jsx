@@ -87,10 +87,10 @@ export default function CategoryForm({ onSubmit, loading, initialCategory = null
           </div>
         </div>
       ))}
-      <div className="mt-3 d-flex gap-2">
-        <button className="btn btn-success" type="submit" disabled={loading}>{loading ? 'Saving...' : initialCategory ? 'Update' : 'Create'}</button>
+      <div className="mt-3 d-flex d-md-inline-flex w-100 gap-2">
+        <button className="btn btn-success flex-fill" type="submit" disabled={loading}>{loading ? 'Saving...' : initialCategory ? 'Update' : 'Create'}</button>
         {initialCategory && (
-          <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancel</button>
+          <button type="button" className="btn btn-secondary flex-fill flex-md-grow-0" onClick={onCancel}>Cancel</button>
         )}
       </div>
     </form>
