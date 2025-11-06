@@ -65,15 +65,15 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="row g-3">
         <div className="col-12 col-md-6 col-lg-3">
-          <label className="form-label fw-bold">Item Name</label>
+          <label className="form-label">Item Name</label>
           <input type="text" className="form-control" value={itemName} onChange={(e) => setItemName(e.target.value)} placeholder="Item name" />
         </div>
         <div className="col-6 col-md-3 col-lg-2">
-          <label className="form-label fw-bold">Amount</label>
+          <label className="form-label">Amount</label>
           <input ref={amountInputRef} type="number" inputMode="decimal" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="1" step="1" required placeholder="0" />
         </div>
         <div className="col-6 col-md-3 col-lg-2">
-          <label className="form-label fw-bold">Date</label>
+          <label className="form-label">Date</label>
           <input
             type="date"
             className="form-control"
@@ -85,11 +85,11 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
           />
         </div>
         <div className="col-12 col-md-6 col-lg-3">
-          <label className="form-label fw-bold">Description</label>
+          <label className="form-label">Description</label>
           <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Optional note" />
         </div>
         <div className="col-12 col-md-6 col-lg-2">
-          <label className="form-label fw-bold">Category</label>
+          <label className="form-label">Category</label>
           <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
             <option value="">Select category</option>
             {categories.map((c) => (

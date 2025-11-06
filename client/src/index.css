@@ -59,3 +59,8 @@ button:focus-visible {
 h1, h2, h3, h4, h5, h6 { margin-bottom: 1rem; color: var(--bs-primary); }
 /* Enforce spacing and color for Bootstrap card titles regardless of utilities */
 .card-title { margin-bottom: 1rem !important; color: var(--bs-primary) !important; }
+/* Set all form labels to medium weight (500) across the app */
+.form-label { font-weight: 500 !important; }
+
+/* Use medium weight for table column headings across the app */
+.table thead th { font-weight: 500; }
