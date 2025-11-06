@@ -71,7 +71,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
         </div>
         <div className="col-md-2">
           <label className="form-label">Amount</label>
-          <input ref={amountInputRef} type="number" inputMode="decimal" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="0" step="0.01" required placeholder="0.00" />
+          <input ref={amountInputRef} type="number" inputMode="decimal" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="1" step="1" required placeholder="0" />
         </div>
         <div className="col-md-3">
           <label className="form-label">Date</label>
