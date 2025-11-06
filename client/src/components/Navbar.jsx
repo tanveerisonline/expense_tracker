@@ -22,7 +22,7 @@ export default function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="nav">
-          <ul className="navbar-nav me-auto">
+          <ul className="navbar-nav gap-lg-4 mx-lg-auto">
             {user && (
               <>
                 <li className="nav-item">

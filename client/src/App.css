@@ -53,7 +53,7 @@
   .table td { padding: 0.6rem; word-break: break-word; overflow-wrap: break-word; }
   .table th { padding: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .navbar .nav-link { padding: 0.7rem 1rem; }
-  /* Make action buttons easier to tap and allow wrapping */
+  /* Keep actions in one row on mobile; avoid wrap */
   .actions-cell { min-width: 160px; white-space: nowrap; }
   .actions-cell .d-inline-flex, .actions-cell .d-flex { flex-wrap: nowrap !important; gap: 0.5rem !important; justify-content: flex-end; }
   .actions-cell .btn.btn-sm { min-height: 36px; white-space: nowrap; padding: 0.45rem 0.6rem; font-size: 0.88rem; }
@@ -90,13 +90,22 @@
 .table-responsive { -webkit-overflow-scrolling: touch; overflow-x: visible; }
 @media (max-width: 768px) {
   .table-responsive { overflow-x: auto; }
+  /* Give Actions column a bit more room on md screens */
+  .equal-cols-6 col:nth-child(6), .wide-cols-5 col:nth-child(5) { width: 16%; }
+  .equal-cols-6 col:nth-child(2), .wide-cols-5 col:nth-child(2) { width: 44%; }
 }
 
 /* Mobile-specific table min width to enable horizontal scrolling */
 @media (max-width: 576px) {
-  .expenses-table { min-width: 720px; }
+  .expenses-table { min-width: 1100px; }
   /* Keep numeric/date columns on one line for readability */
   .expenses-table th, .expenses-table td { white-space: nowrap; }
+  /* Show full header labels; no ellipsis on mobile */
+  .expenses-table th { overflow: visible; text-overflow: clip; }
+  /* Increase spacing and readability for table headers on mobile */
+  .expenses-table thead th { padding: 0.8rem 1rem; letter-spacing: 0.02em; }
+  /* Increase cell padding so rows don’t feel compact */
+  .expenses-table tbody td { padding: 0.75rem 1rem; }
   /* Allow long text columns to wrap */
   .expenses-table td.text-break { white-space: normal; }
 }
@@ -110,53 +119,8 @@
 .summary-boxes { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 .summary-boxes > div { flex: 1 1 180px; }
 
-/* Pagination: match green styling with Add button (btn-success semantics) */
-/* Page number buttons: green */
-.pagination .page-item:not(.prev):not(.next) .page-link {
-  background-color: #198754; /* Bootstrap success */
-  border-color: #198754;
-  color: #fff;
-}
-.pagination .page-item:not(.prev):not(.next) .page-link:hover,
-.pagination .page-item:not(.prev):not(.next) .page-link:focus {
-  background-color: #157347;
-  border-color: #157347;
-  color: #fff;
-}
-.pagination .page-item.active:not(.prev):not(.next) .page-link {
-  background-color: #146c43;
-  border-color: #146c43;
-  color: #fff;
-}
-/* Prev/Next buttons: match Export PDF (warning/yellow) */
-.pagination .prev .page-link {
-  background-color: #0d6efd; /* Bootstrap primary (match Export CSV) */
-  border-color: #0d6efd;
-  color: #fff;
-}
-.pagination .prev .page-link:hover,
-.pagination .prev .page-link:focus {
-  background-color: #0b5ed7;
-  border-color: #0b5ed7;
-  color: #fff;
-}
-.pagination .next .page-link {
-  background-color: #ffc107; /* Bootstrap warning (match Export PDF) */
-  border-color: #ffc107;
-  color: #212529;
-}
-.pagination .next .page-link:hover,
-.pagination .next .page-link:focus {
-  background-color: #ffca2c;
-  border-color: #ffca2c;
-  color: #212529;
-}
-.pagination .page-item.disabled .page-link {
-  background-color: #6c757d; /* gray for disabled for contrast */
-  border-color: #6c757d;
-  color: #fff;
-}
-.pagination-count { margin-left: 0.5rem; }
+/* Pagination: use default Bootstrap colors, keep touch sizing only */
+.pagination-count { margin-left: 0.5rem; color: var(--bs-success); }
 @media (max-width: 576px) {
   .pagination-count { width: 100%; text-align: right; margin-top: 0.5rem; }
 }
@@ -164,4 +128,10 @@
 .btn-add { padding: 0.5rem 1rem; font-size: 1rem; }
 @media (max-width: 576px) {
   .btn-add { padding: 0.5rem 1rem; font-size: 1rem; }
+}
+/* Smaller Logout item in user dropdown across all screens */
+#userMenu + .dropdown-menu .dropdown-item {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.875rem; /* ~14px */
+  line-height: 1.2;
 }
