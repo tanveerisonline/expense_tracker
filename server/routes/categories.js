@@ -2,6 +2,7 @@ const express = require('express')
 const { body, validationResult } = require('express-validator')
 const auth = require('../middleware/auth')
 const Category = require('../models/Category')
+const Expense = require('../models/Expense')
 
 const router = express.Router()
 
@@ -41,3 +42,17 @@ router.post('/seed-default', auth, async (req, res) => {
 })
 
 module.exports = router
+// Delete category with safety check
+router.delete('/:id', auth, async (req, res) => {
+  const { id } = req.params
+  // Ensure category belongs to user
+  const category = await Category.findOne({ _id: id, userId: req.user.id })
+  if (!category) return res.status(404).json({ message: 'Category not found' })
+  // Block delete if any expenses reference this category
+  const count = await Expense.countDocuments({ userId: req.user.id, categoryId: id })
+  if (count > 0) {
+    return res.status(409).json({ message: 'Cannot delete: category has related expenses' })
+  }
+  await Category.deleteOne({ _id: id, userId: req.user.id })
+  res.json({ message: 'Deleted' })
+})

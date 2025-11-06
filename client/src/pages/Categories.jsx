@@ -31,6 +31,18 @@ export default function Categories() {
     }
   }
 
+  const deleteCategory = async (id) => {
+    setError('')
+    const ok = window.confirm('Delete this category? This cannot be undone.')
+    if (!ok) return
+    try {
+      await api.delete(`/categories/${id}`, { headers: { 'X-CSRF-Token': csrfToken } })
+      await loadCategories()
+    } catch (e) {
+      setError(e?.response?.data?.message || 'Failed to delete category')
+    }
+  }
+
   return (
     <div>
       <CategoryForm onSubmit={createCategory} loading={loading} />
@@ -38,20 +50,32 @@ export default function Categories() {
       <div className="card card-body">
         <h5 className="card-title">Your Categories</h5>
         <div className="table-responsive">
-          <table className="table table-striped">
+          <table className="table table-striped align-middle">
             <thead>
               <tr>
                 <th>Name</th>
                 <th>Fields</th>
+                <th className="text-end">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {categories.map((c) => (
-                <tr key={c._id}>
-                  <td>{c.name}</td>
-                  <td>{(c.fields || []).map((f) => f.label).join(', ')}</td>
+              {categories.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="text-center text-muted">No categories yet. Create one above.</td>
                 </tr>
-              ))}
+              ) : (
+                categories.map((c) => (
+                  <tr key={c._id}>
+                    <td>{c.name}</td>
+                    <td>{(c.fields || []).map((f) => f.label).join(', ')}</td>
+                    <td className="text-end">
+                      <button className="btn btn-sm btn-outline-danger" onClick={() => deleteCategory(c._id)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

@@ -52,7 +52,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
       <h5 className="card-title">{editingExpense ? 'Edit Expense' : 'Add Expense'}</h5>
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="row g-3">
-        <div className="col-md-3">
+        <div className="col-md-4">
           <label className="form-label">Category</label>
           <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
             <option value="">Select category</option>
@@ -61,9 +61,9 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
             ))}
           </select>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <label className="form-label">Amount</label>
-          <input type="number" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="0" step="0.01" required />
+          <input type="number" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="0" step="0.01" required placeholder="0.00" />
         </div>
         <div className="col-md-3">
           <label className="form-label">Date</label>
@@ -71,7 +71,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
         </div>
         <div className="col-md-3">
           <label className="form-label">Description</label>
-          <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Optional note" />
         </div>
       </div>
       {currentCategory?.fields?.length ? (
@@ -83,7 +83,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
                 <input type="text" className="form-control" value={customValues[f.key] || ''} onChange={(e) => handleCustomChange(f.key, e.target.value)} />
               )}
               {f.type === 'number' && (
-                <input type="number" className="form-control" value={customValues[f.key] || ''} onChange={(e) => handleCustomChange(f.key, e.target.value)} />
+                <input type="number" className="form-control" value={customValues[f.key] || ''} onChange={(e) => handleCustomChange(f.key, e.target.value)} placeholder="0" />
               )}
               {f.type === 'date' && (
                 <input type="date" className="form-control" value={customValues[f.key] || ''} onChange={(e) => handleCustomChange(f.key, e.target.value)} />
@@ -107,8 +107,16 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
           ))}
         </div>
       ) : null}
-      <div className="mt-3">
+      <div className="mt-3 d-flex gap-2">
         <button className="btn btn-success" type="submit" disabled={loading}>{loading ? 'Saving...' : editingExpense ? 'Update' : 'Add'}</button>
+        {editingExpense && (
+          <button type="button" className="btn btn-outline-secondary" onClick={() => {
+            setAmount('')
+            setDate('')
+            setDescription('')
+            setCustomValues({})
+          }}>Cancel</button>
+        )}
       </div>
     </form>
   )
