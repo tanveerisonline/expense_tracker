@@ -121,14 +121,16 @@ export default function Home() {
     const params = new URLSearchParams()
     if (selectedCategoryId) params.set('category', selectedCategoryId)
     if (search) params.set('search', search)
-    window.location.href = `/api/expenses/export/csv?${params.toString()}`
+    const base = api.defaults.baseURL?.replace(/\/$/, '') || '/api'
+    window.location.href = `${base}/expenses/export/csv?${params.toString()}`
   }
 
   const exportPdf = () => {
     const params = new URLSearchParams()
     if (selectedCategoryId) params.set('category', selectedCategoryId)
     if (search) params.set('search', search)
-    window.location.href = `/api/expenses/export/pdf?${params.toString()}`
+    const base = api.defaults.baseURL?.replace(/\/$/, '') || '/api'
+    window.location.href = `${base}/expenses/export/pdf?${params.toString()}`
   }
 
   return (

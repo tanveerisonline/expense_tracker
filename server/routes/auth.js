@@ -8,10 +8,12 @@ const router = express.Router()
 
 const issueToken = (res, user) => {
   const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' })
+  const sameSite = (process.env.COOKIE_SAMESITE || 'lax').toLowerCase() // 'lax' | 'strict' | 'none'
+  const secure = String(process.env.COOKIE_SECURE || (process.env.NODE_ENV === 'production')).toLowerCase() === 'true'
   res.cookie(process.env.JWT_COOKIE_NAME || 'token', token, {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: false,
+    sameSite,
+    secure,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   })
 }

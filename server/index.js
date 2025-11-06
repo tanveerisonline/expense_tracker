@@ -18,6 +18,8 @@ const app = express()
 
 const PORT = process.env.PORT || 5000
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173'
+const COOKIE_SAMESITE = (process.env.COOKIE_SAMESITE || 'lax').toLowerCase() // 'lax' | 'strict' | 'none'
+const COOKIE_SECURE = String(process.env.COOKIE_SECURE || (process.env.NODE_ENV === 'production')).toLowerCase() === 'true'
 const JWT_COOKIE_NAME = process.env.JWT_COOKIE_NAME || 'token'
 
 // Security & parsing
@@ -44,7 +46,14 @@ app.use(
 )
 
 // CSRF protection using cookies
-const csrfProtection = csrf({ cookie: { key: process.env.CSRF_COOKIE_NAME || '_csrf', sameSite: 'lax', httpOnly: true } })
+const csrfProtection = csrf({
+  cookie: {
+    key: process.env.CSRF_COOKIE_NAME || '_csrf',
+    sameSite: COOKIE_SAMESITE,
+    httpOnly: true,
+    secure: COOKIE_SECURE,
+  },
+})
 
 // Routes
 app.get('/api/csrf-token', csrfProtection, (req, res) => {
