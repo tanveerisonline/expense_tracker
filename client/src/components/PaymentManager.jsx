@@ -110,7 +110,15 @@ export default function PaymentManager({ categories }) {
             </div>
             <div className="col-12 col-md-3">
               <label className="form-label">Date</label>
-              <input className="form-control" type="date" value={date} readOnly onClick={populateToday} onFocus={populateToday} />
+              <input
+                className="form-control"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+                onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch (_) {} }}
+                onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch (_) {} }}
+              />
             </div>
             <div className="col-12 col-md-3">
               <label className="form-label">Note</label>
