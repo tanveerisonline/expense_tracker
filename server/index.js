@@ -12,6 +12,7 @@ const authRoutes = require('./routes/auth')
 const categoryRoutes = require('./routes/categories')
 const expenseRoutes = require('./routes/expenses')
 const statsRoutes = require('./routes/stats')
+const paymentRoutes = require('./routes/payments')
 
 const app = express()
 
@@ -54,6 +55,7 @@ app.use('/api/auth', csrfProtection, authRoutes)
 app.use('/api/categories', csrfProtection, categoryRoutes)
 app.use('/api/expenses', csrfProtection, expenseRoutes)
 app.use('/api/stats', csrfProtection, statsRoutes)
+app.use('/api/payments', csrfProtection, paymentRoutes)
 
 // Connect DB and start server
 async function start() {

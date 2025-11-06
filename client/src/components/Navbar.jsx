@@ -34,6 +34,9 @@ export default function Navbar() {
                 <li className="nav-item">
                   <NavLink to="/bulk-delete" className="nav-link">Bulk Delete</NavLink>
                 </li>
+                <li className="nav-item">
+                  <NavLink to="/payments" className="nav-link">Payments</NavLink>
+                </li>
               </>
             )}
           </ul>
