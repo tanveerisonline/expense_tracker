@@ -100,7 +100,7 @@ export default function Home() {
         <div className="row g-3 align-items-end">
           <div className="col-12 col-md-4">
             <label className="form-label">Search</label>
-            <input className="form-control" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search description or amount" />
+            <input className="form-control" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search item, description or amount" />
           </div>
           <div className="col-12 col-md-4">
             <label className="form-label">Category</label>
@@ -135,7 +135,12 @@ export default function Home() {
       </div>
 
       <div className="card card-body">
-        <h5 className="card-title">Expenses</h5>
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+          <h5 className="card-title mb-2 mb-md-0">Expenses</h5>
+          <div className="mt-1 mt-md-0">
+            <span className="fw-bold">Category: {categories.find((c) => c._id === selectedCategoryId)?.name || 'All'}</span>
+          </div>
+        </div>
         {loading ? (
           <div>Loading...</div>
         ) : (

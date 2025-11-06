@@ -30,6 +30,7 @@ router.get('/', auth, async (req, res) => {
   if (search) {
     const num = Number(search)
     query.$or = [
+      { itemName: { $regex: search, $options: 'i' } },
       { description: { $regex: search, $options: 'i' } },
       ...(isNaN(num) ? [] : [{ amount: num }]),
     ]
@@ -42,6 +43,7 @@ router.get('/', auth, async (req, res) => {
   const total = await Expense.countDocuments(query)
   const mapped = items.map((e) => ({
     _id: e._id,
+    itemName: e.itemName,
     amount: e.amount,
     date: e.date,
     description: e.description,
@@ -57,6 +59,7 @@ router.post(
   auth,
   [
     body('categoryId').isString(),
+    body('itemName').optional().isString(),
     body('amount').isFloat({ gt: 0 }),
     body('date').isISO8601(),
     body('description').optional().isString(),
@@ -65,9 +68,9 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), message: 'Invalid input' })
-    const { categoryId, amount, date, description, customFields = {} } = req.body
+    const { categoryId, itemName, amount, date, description, customFields = {} } = req.body
     await validateCustomFields(req.user.id, categoryId, customFields)
-    const expense = await Expense.create({ userId: req.user.id, categoryId, amount, date, description, customFields })
+    const expense = await Expense.create({ userId: req.user.id, categoryId, itemName, amount, date, description, customFields })
     res.status(201).json({ expense })
   }
 )
@@ -78,6 +81,7 @@ router.put(
   auth,
   [
     body('categoryId').isString(),
+    body('itemName').optional().isString(),
     body('amount').isFloat({ gt: 0 }),
     body('date').isISO8601(),
     body('description').optional().isString(),
@@ -87,11 +91,11 @@ router.put(
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), message: 'Invalid input' })
     const { id } = req.params
-    const { categoryId, amount, date, description, customFields = {} } = req.body
+    const { categoryId, itemName, amount, date, description, customFields = {} } = req.body
     await validateCustomFields(req.user.id, categoryId, customFields)
     const expense = await Expense.findOneAndUpdate(
       { _id: id, userId: req.user.id },
-      { categoryId, amount, date, description, customFields },
+      { categoryId, itemName, amount, date, description, customFields },
       { new: true }
     )
     if (!expense) return res.status(404).json({ message: 'Not found' })
@@ -115,6 +119,7 @@ router.get('/export/csv', auth, async (req, res) => {
   if (search) {
     const num = Number(search)
     query.$or = [
+      { itemName: { $regex: search, $options: 'i' } },
       { description: { $regex: search, $options: 'i' } },
       ...(isNaN(num) ? [] : [{ amount: num }]),
     ]
@@ -123,6 +128,7 @@ router.get('/export/csv', auth, async (req, res) => {
   const rows = items.map((e) => ({
     Date: new Date(e.date).toLocaleDateString(),
     Category: e.categoryId?.name,
+    'Item Name': e.itemName || '',
     Amount: e.amount,
     Description: e.description,
   }))
@@ -141,6 +147,7 @@ router.get('/export/pdf', auth, async (req, res) => {
   if (search) {
     const num = Number(search)
     query.$or = [
+      { itemName: { $regex: search, $options: 'i' } },
       { description: { $regex: search, $options: 'i' } },
       ...(isNaN(num) ? [] : [{ amount: num }]),
     ]
@@ -153,7 +160,7 @@ router.get('/export/pdf', auth, async (req, res) => {
   doc.fontSize(18).text('Expenses Report', { align: 'center' })
   doc.moveDown()
   items.forEach((e) => {
-    doc.fontSize(12).text(`${new Date(e.date).toLocaleDateString()} | ${e.categoryId?.name} | ${e.amount.toFixed(2)} | ${e.description || ''}`)
+    doc.fontSize(12).text(`${new Date(e.date).toLocaleDateString()} | ${e.categoryId?.name} | ${e.itemName || ''} | ${e.amount.toFixed(2)} | ${e.description || ''}`)
   })
   doc.end()
 })

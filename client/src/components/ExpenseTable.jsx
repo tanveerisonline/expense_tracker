@@ -11,7 +11,7 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
         <thead>
           <tr>
             <th onClick={() => toggleSort('date')} role="button">Date</th>
-            <th onClick={() => toggleSort('categoryName')} role="button">Category</th>
+            <th onClick={() => toggleSort('itemName')} role="button">Item Name</th>
             <th className="text-end" onClick={() => toggleSort('amount')} role="button">Amount</th>
             <th>Description</th>
             <th>Actions</th>
@@ -26,7 +26,7 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
             expenses.map((e) => (
               <tr key={e._id}>
                 <td>{new Date(e.date).toLocaleDateString()}</td>
-                <td>{e.category?.name || e.categoryName}</td>
+                <td>{e.itemName || ''}</td>
                 <td className="text-end">{Number(e.amount).toFixed(2)}</td>
                 <td>{e.description}</td>
                 <td>
