@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import CategoryForm from '../components/CategoryForm'
@@ -9,6 +9,7 @@ export default function Categories() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [editingCategory, setEditingCategory] = useState(null)
+  const formRef = useRef(null)
 
   const loadCategories = async () => {
     const { data } = await api.get('/categories')
@@ -61,12 +62,14 @@ export default function Categories() {
 
   return (
     <div>
-      <CategoryForm
-        onSubmit={editingCategory ? updateCategory : createCategory}
-        loading={loading}
-        initialCategory={editingCategory}
-        onCancel={() => setEditingCategory(null)}
-      />
+      <div ref={formRef}>
+        <CategoryForm
+          onSubmit={editingCategory ? updateCategory : createCategory}
+          loading={loading}
+          initialCategory={editingCategory}
+          onCancel={() => setEditingCategory(null)}
+        />
+      </div>
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="card card-body">
         <h5 className="card-title">Your Categories</h5>
@@ -91,7 +94,20 @@ export default function Categories() {
                     <td>{(c.fields || []).map((f) => f.label).join(', ')}</td>
                     <td className="text-end">
                       <div className="d-flex d-md-inline-flex gap-2 w-100 justify-content-md-end">
-                        <button className="btn btn-sm btn-primary flex-fill flex-md-grow-0 me-md-2" onClick={() => setEditingCategory(c)}>
+                        <button
+                          className="btn btn-sm btn-primary flex-fill flex-md-grow-0 me-md-2"
+                          onClick={() => {
+                            setEditingCategory(c)
+                            // Smoothly scroll the form into view (top)
+                            setTimeout(() => {
+                              if (formRef.current) {
+                                formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                              } else {
+                                window.scrollTo({ top: 0, behavior: 'smooth' })
+                              }
+                            }, 0)
+                          }}
+                        >
                           Edit
                         </button>
                         <button className="btn btn-sm btn-danger flex-fill flex-md-grow-0" onClick={() => deleteCategory(c._id)}>

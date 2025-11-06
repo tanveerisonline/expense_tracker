@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import ExpenseForm from '../components/ExpenseForm'
@@ -21,6 +21,7 @@ export default function Home() {
   const [sort, setSort] = useState({ key: 'date', direction: 'desc' })
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState(null)
+  const formRef = useRef(null)
   // Charts removed: stats state eliminated
 
   // Seed default categories for the user if missing
@@ -123,13 +124,15 @@ export default function Home() {
         </div>
       </div>
 
-      <ExpenseForm
-        categories={categories}
-        selectedCategoryId={selectedCategoryId}
-        onSubmit={handleAddOrUpdate}
-        editingExpense={editing}
-        loading={loading}
-      />
+      <div ref={formRef}>
+        <ExpenseForm
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          onSubmit={handleAddOrUpdate}
+          editingExpense={editing}
+          loading={loading}
+        />
+      </div>
 
       <div className="card card-body">
         <h5 className="card-title">Expenses</h5>
@@ -137,7 +140,22 @@ export default function Home() {
           <div>Loading...</div>
         ) : (
           <>
-            <ExpenseTable expenses={expenses} onEdit={setEditing} onDelete={handleDelete} sort={sort} setSort={setSort} />
+            <ExpenseTable
+              expenses={expenses}
+              onEdit={(e) => {
+                setEditing(e)
+                setTimeout(() => {
+                  if (formRef.current) {
+                    formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                }, 0)
+              }}
+              onDelete={handleDelete}
+              sort={sort}
+              setSort={setSort}
+            />
             <nav>
               <ul className="pagination">
                 <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>

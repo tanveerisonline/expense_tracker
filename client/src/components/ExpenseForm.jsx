@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { validateAmount } from '../utils/validation'
 
 export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, editingExpense, loading }) {
@@ -8,6 +8,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
   const [description, setDescription] = useState('')
   const [customValues, setCustomValues] = useState({})
   const [error, setError] = useState('')
+  const amountInputRef = useRef(null)
 
   useEffect(() => {
     setCategoryId(selectedCategoryId || '')
@@ -20,6 +21,13 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
       setDate(editingExpense.date?.slice(0, 10) || '')
       setDescription(editingExpense.description || '')
       setCustomValues(editingExpense.customFields || {})
+      // Focus and select the Amount field when edit starts
+      setTimeout(() => {
+        if (amountInputRef.current) {
+          amountInputRef.current.focus()
+          amountInputRef.current.select()
+        }
+      }, 0)
     } else {
       setAmount('')
       setDate('')
@@ -63,7 +71,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
         </div>
         <div className="col-md-2">
           <label className="form-label">Amount</label>
-          <input type="number" inputMode="decimal" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="0" step="0.01" required placeholder="0.00" />
+          <input ref={amountInputRef} type="number" inputMode="decimal" className="form-control" value={amount} onChange={(e) => setAmount(e.target.value)} min="0" step="0.01" required placeholder="0.00" />
         </div>
         <div className="col-md-3">
           <label className="form-label">Date</label>

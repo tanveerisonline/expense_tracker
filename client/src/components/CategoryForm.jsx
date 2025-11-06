@@ -1,14 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function CategoryForm({ onSubmit, loading, initialCategory = null, onCancel }) {
   const [name, setName] = useState('')
   const [fields, setFields] = useState([])
   const [error, setError] = useState('')
+  const nameInputRef = useRef(null)
 
   useEffect(() => {
     if (initialCategory) {
       setName(initialCategory.name || '')
       setFields(initialCategory.fields || [])
+      // Focus and select the Category Name when editing starts
+      setTimeout(() => {
+        if (nameInputRef.current) {
+          nameInputRef.current.focus()
+          nameInputRef.current.select()
+        }
+      }, 0)
     } else {
       setName('')
       setFields([])
@@ -49,7 +57,7 @@ export default function CategoryForm({ onSubmit, loading, initialCategory = null
       <div className="row g-3">
         <div className="col-md-6">
           <label className="form-label">Category Name</label>
-          <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
+          <input ref={nameInputRef} type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <div className="col-md-6 d-flex align-items-end">
           <button type="button" className="btn btn-info" onClick={addField}>Add Field</button>
