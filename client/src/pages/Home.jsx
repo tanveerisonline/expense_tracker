@@ -139,7 +139,7 @@ export default function Home() {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
           <h5 className="card-title" style={{ marginBottom: '2.2rem' }}>Expenses</h5>
           <div className="mt-1 mt-md-0">
-            <span className="fw-bold">Category: {categories.find((c) => c._id === selectedCategoryId)?.name || 'All'}</span>
+            <span className="fw-bold text-success text-uppercase">Category: {categories.find((c) => c._id === selectedCategoryId)?.name || 'All'}</span>
           </div>
         </div>
         {loading ? (
@@ -161,6 +161,7 @@ export default function Home() {
               onDelete={handleDelete}
               sort={sort}
               setSort={setSort}
+              showCategoryColumn={!selectedCategoryId}
             />
             <nav>
               <ul className="pagination">

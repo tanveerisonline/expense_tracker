@@ -79,7 +79,7 @@ export default function Categories() {
               <tr>
                 <th>Name</th>
                 <th>Fields</th>
-                <th className="text-end">Actions</th>
+                <th className="text-end actions-cell">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -92,8 +92,8 @@ export default function Categories() {
                   <tr key={c._id}>
                     <td>{c.name}</td>
                     <td>{(c.fields || []).map((f) => f.label).join(', ')}</td>
-                    <td className="text-end">
-                      <div className="d-flex d-md-inline-flex gap-2 w-100 justify-content-md-end">
+                    <td className="text-end actions-cell">
+                      <div className="d-flex d-md-inline-flex gap-2 w-100 justify-content-md-end flex-wrap">
                         <button
                           className="btn btn-sm btn-primary flex-fill flex-md-grow-0 me-md-2"
                           onClick={() => {

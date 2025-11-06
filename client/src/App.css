@@ -35,16 +35,39 @@
 
 .card { padding: 1rem; }
 
+/* Default actions cell button sizing for desktop/laptop */
+.actions-cell .btn.btn-sm { padding: 0.45rem 0.7rem; font-size: 0.9rem; line-height: 1.2; }
+
 .read-the-docs {
   color: #888;
 }
 
-/* Mobile-friendly touch targets and spacing (slightly smaller buttons) */
+/* Mobile-friendly touch targets and spacing */
 @media (max-width: 576px) {
-  .btn { padding: 0.5rem 0.75rem; font-size: 0.95rem; }
-  .btn.btn-sm { padding: 0.45rem 0.7rem; font-size: 0.9rem; }
-  .form-control, .form-select { min-height: 42px; }
-  .pagination .page-link { min-width: 40px; min-height: 40px; line-height: 1.25; padding: 0.5rem 0.7rem; }
-  .table td, .table th { padding: 0.6rem; }
-  .navbar .nav-link { padding: 0.6rem 0.9rem; }
+  .btn { padding: 0.6rem 0.85rem; font-size: 0.95rem; }
+  .btn.btn-sm { padding: 0.55rem 0.8rem; font-size: 0.9rem; }
+  .form-control, .form-select { min-height: 44px; }
+  .pagination .page-link { min-width: 44px; min-height: 44px; line-height: 1.35; padding: 0.55rem 0.8rem; }
+  .table { table-layout: auto; }
+  /* Let cell content wrap, but keep headers on one line to avoid letter stacking */
+  .table td { padding: 0.6rem; word-break: break-word; overflow-wrap: break-word; }
+  .table th { padding: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .navbar .nav-link { padding: 0.7rem 1rem; }
+  /* Make action buttons easier to tap and allow wrapping */
+  .actions-cell { min-width: 160px; }
+  .actions-cell .d-inline-flex { flex-wrap: nowrap !important; gap: 0.4rem !important; }
+  .actions-cell .btn.btn-sm { min-height: 36px; white-space: nowrap; padding: 0.45rem 0.6rem; font-size: 0.88rem; }
+}
+
+/* Column width rules (desktop/default) driven by table classes */
+.equal-cols-6 col { width: 16.6667%; }
+.wide-cols-5 col:nth-child(1) { width: 20%; }
+.wide-cols-5 col:nth-child(2) { width: 45%; }
+.wide-cols-5 col:nth-child(3) { width: 10%; }
+.wide-cols-5 col:nth-child(4) { width: 15%; }
+.wide-cols-5 col:nth-child(5) { width: 10%; }
+
+/* On small screens, let columns auto-size and preserve actions space */
+@media (max-width: 576px) {
+  .equal-cols-6 col, .wide-cols-5 col { width: auto; }
 }
