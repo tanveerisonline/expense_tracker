@@ -10,10 +10,10 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
       <table className="table table-striped table-hover align-middle">
         <thead>
           <tr>
-            <th onClick={() => toggleSort('date')} role="button">Date</th>
             <th onClick={() => toggleSort('itemName')} role="button">Item Name</th>
+            <th onClick={() => toggleSort('description')} role="button">Description</th>
             <th className="text-end" onClick={() => toggleSort('amount')} role="button">Amount</th>
-            <th>Description</th>
+            <th onClick={() => toggleSort('date')} role="button">Date</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -25,10 +25,10 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
           ) : (
             expenses.map((e) => (
               <tr key={e._id}>
-                <td>{new Date(e.date).toLocaleDateString()}</td>
                 <td>{e.itemName || ''}</td>
-                <td className="text-end">{Number(e.amount).toFixed(2)}</td>
                 <td>{e.description}</td>
+                <td className="text-end">{Number(e.amount).toFixed(2)}</td>
+                <td>{new Date(e.date).toLocaleDateString()}</td>
                 <td>
                   <div className="d-flex d-md-block gap-2 w-100">
                     <button className="btn btn-sm btn-primary flex-fill me-md-2" onClick={() => onEdit(e)}>Edit</button>
