@@ -31,6 +31,9 @@ export default function Navbar() {
                 <li className="nav-item">
                   <NavLink to="/categories" className="nav-link">Categories</NavLink>
                 </li>
+                <li className="nav-item">
+                  <NavLink to="/bulk-delete" className="nav-link">Bulk Delete</NavLink>
+                </li>
               </>
             )}
           </ul>
@@ -46,7 +49,7 @@ export default function Navbar() {
                   {user.name}
                 </a>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                  <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
+                  <li><button className="dropdown-item text-danger" onClick={handleLogout}>Logout</button></li>
                 </ul>
               </li>
             )}

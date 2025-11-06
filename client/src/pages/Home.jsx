@@ -3,7 +3,7 @@ import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import ExpenseForm from '../components/ExpenseForm'
 import ExpenseTable from '../components/ExpenseTable'
-import ChartSection from '../components/ChartSection'
+// Charts removed
 
 const PREDEFINED_CATEGORIES = [
   'Home Vegetables','School Fee','Ahad Bhaijan','Tuition Fee','Medicines','Bus Fare','Pocket Money','Guest','Rice','Petrol','Dr Ashraf','Khuj Wali','Electricity','Clothes','Charges','Gas','Kids','Doctor','Other'
@@ -21,8 +21,7 @@ export default function Home() {
   const [sort, setSort] = useState({ key: 'date', direction: 'desc' })
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [statsCategory, setStatsCategory] = useState([])
-  const [statsDaily, setStatsDaily] = useState([])
+  // Charts removed: stats state eliminated
 
   // Seed default categories for the user if missing
   const seedDefaults = async () => {
@@ -53,19 +52,14 @@ export default function Home() {
     }
   }
 
-  const loadStats = async () => {
-    const { data } = await api.get('/stats/summary')
-    setStatsCategory(data.byCategory)
-    setStatsDaily(data.byDate)
-  }
+  // Charts removed: loadStats eliminated
 
   useEffect(() => {
     seedDefaults().then(() => loadCategories())
   }, [])
 
   useEffect(() => {
-    loadExpenses();
-    loadStats();
+    loadExpenses()
   }, [page, limit, selectedCategoryId, search, sort])
 
   const handleAddOrUpdate = async (payload) => {
@@ -76,13 +70,11 @@ export default function Home() {
       await api.post('/expenses', payload, { headers: { 'X-CSRF-Token': csrfToken } })
     }
     await loadExpenses()
-    await loadStats()
   }
 
   const handleDelete = async (id) => {
     await api.delete(`/expenses/${id}`, { headers: { 'X-CSRF-Token': csrfToken } })
     await loadExpenses()
-    await loadStats()
   }
 
   const pages = useMemo(() => Math.ceil(total / limit), [total, limit])
@@ -103,29 +95,31 @@ export default function Home() {
 
   return (
     <div>
-      <div className="row g-3 align-items-end">
-        <div className="col-md-4">
-          <label className="form-label">Search</label>
-          <input className="form-control" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search description or amount" />
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">Category</label>
-          <select className="form-select" value={selectedCategoryId} onChange={(e) => setSelectedCategoryId(e.target.value)}>
-            <option value="">All</option>
-            {categories.map((c) => (
-              <option key={c._id} value={c._id}>{c.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="col-md-2">
-          <label className="form-label">Page Size</label>
-          <select className="form-select" value={limit} onChange={(e) => setLimit(Number(e.target.value))}>
-            {[10,20,50].map((n) => <option key={n} value={n}>{n}</option>)}
-          </select>
-        </div>
-        <div className="col-md-2 d-flex gap-2">
-          <button className="btn btn-outline-secondary mt-auto" onClick={exportCsv}>Export CSV</button>
-          <button className="btn btn-outline-secondary mt-auto" onClick={exportPdf}>Export PDF</button>
+      <div className="card card-body mb-4">
+        <div className="row g-3 align-items-end">
+          <div className="col-12 col-md-4">
+            <label className="form-label">Search</label>
+            <input className="form-control" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search description or amount" />
+          </div>
+          <div className="col-12 col-md-4">
+            <label className="form-label">Category</label>
+            <select className="form-select" value={selectedCategoryId} onChange={(e) => setSelectedCategoryId(e.target.value)}>
+              <option value="">All</option>
+              {categories.map((c) => (
+                <option key={c._id} value={c._id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="col-6 col-md-2">
+            <label className="form-label">Page Size</label>
+            <select className="form-select" value={limit} onChange={(e) => setLimit(Number(e.target.value))}>
+              {[10,20,30,40,50,60,90,100].map((n) => <option key={n} value={n}>{n}</option>)}
+            </select>
+          </div>
+          <div className="col-6 col-md-2 d-flex gap-2 flex-wrap justify-content-md-end">
+            <button className="btn btn-primary btn-sm" onClick={exportCsv}>Export CSV</button>
+            <button className="btn btn-warning btn-sm" onClick={exportPdf}>Export PDF</button>
+          </div>
         </div>
       </div>
 
@@ -163,7 +157,7 @@ export default function Home() {
         )}
       </div>
 
-      <ChartSection byCategory={statsCategory} byDate={statsDaily} />
+      {/* Charts removed */}
     </div>
   )
 }

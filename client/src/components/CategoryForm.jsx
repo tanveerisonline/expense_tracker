@@ -1,9 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export default function CategoryForm({ onSubmit, loading }) {
+export default function CategoryForm({ onSubmit, loading, initialCategory = null, onCancel }) {
   const [name, setName] = useState('')
   const [fields, setFields] = useState([])
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (initialCategory) {
+      setName(initialCategory.name || '')
+      setFields(initialCategory.fields || [])
+    } else {
+      setName('')
+      setFields([])
+    }
+  }, [initialCategory])
 
   const addField = () => {
     setFields((prev) => [...prev, { key: '', label: '', type: 'text', options: [] }])
@@ -34,7 +44,7 @@ export default function CategoryForm({ onSubmit, loading }) {
 
   return (
     <form onSubmit={handleSubmit} className="card card-body mb-4">
-      <h5 className="card-title">Create Category</h5>
+      <h5 className="card-title">{initialCategory ? 'Edit Category' : 'Create Category'}</h5>
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="row g-3">
         <div className="col-md-6">
@@ -42,7 +52,7 @@ export default function CategoryForm({ onSubmit, loading }) {
           <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <div className="col-md-6 d-flex align-items-end">
-          <button type="button" className="btn btn-outline-primary" onClick={addField}>Add Field</button>
+          <button type="button" className="btn btn-info" onClick={addField}>Add Field</button>
         </div>
       </div>
 
@@ -73,12 +83,15 @@ export default function CategoryForm({ onSubmit, loading }) {
             </div>
           )}
           <div className="col-md-2 d-flex align-items-end">
-            <button type="button" className="btn btn-outline-danger" onClick={() => removeField(i)}>Remove</button>
+            <button type="button" className="btn btn-danger" onClick={() => removeField(i)}>Remove</button>
           </div>
         </div>
       ))}
-      <div className="mt-3">
-        <button className="btn btn-success" type="submit" disabled={loading}>{loading ? 'Saving...' : 'Create'}</button>
+      <div className="mt-3 d-flex gap-2">
+        <button className="btn btn-success" type="submit" disabled={loading}>{loading ? 'Saving...' : initialCategory ? 'Update' : 'Create'}</button>
+        {initialCategory && (
+          <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancel</button>
+        )}
       </div>
     </form>
   )

@@ -80,7 +80,7 @@ export default function Login() {
                       </div>
                       <button
                         type="button"
-                        className="btn btn-outline-secondary"
+                        className="btn btn-secondary"
                         onClick={() => setShowPassword((s) => !s)}
                         aria-label="Toggle password visibility"
                       >

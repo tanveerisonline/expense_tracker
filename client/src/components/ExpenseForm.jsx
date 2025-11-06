@@ -110,7 +110,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
       <div className="mt-3 d-flex gap-2">
         <button className="btn btn-success" type="submit" disabled={loading}>{loading ? 'Saving...' : editingExpense ? 'Update' : 'Add'}</button>
         {editingExpense && (
-          <button type="button" className="btn btn-outline-secondary" onClick={() => {
+          <button type="button" className="btn btn-secondary" onClick={() => {
             setAmount('')
             setDate('')
             setDescription('')

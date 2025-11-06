@@ -8,6 +8,7 @@ export default function Categories() {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [editingCategory, setEditingCategory] = useState(null)
 
   const loadCategories = async () => {
     const { data } = await api.get('/categories')
@@ -31,6 +32,21 @@ export default function Categories() {
     }
   }
 
+  const updateCategory = async (payload) => {
+    if (!editingCategory) return
+    setLoading(true)
+    setError('')
+    try {
+      await api.put(`/categories/${editingCategory._id}`, payload, { headers: { 'X-CSRF-Token': csrfToken } })
+      setEditingCategory(null)
+      await loadCategories()
+    } catch (e) {
+      setError(e?.response?.data?.message || 'Failed to update category')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const deleteCategory = async (id) => {
     setError('')
     const ok = window.confirm('Delete this category? This cannot be undone.')
@@ -45,7 +61,12 @@ export default function Categories() {
 
   return (
     <div>
-      <CategoryForm onSubmit={createCategory} loading={loading} />
+      <CategoryForm
+        onSubmit={editingCategory ? updateCategory : createCategory}
+        loading={loading}
+        initialCategory={editingCategory}
+        onCancel={() => setEditingCategory(null)}
+      />
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="card card-body">
         <h5 className="card-title">Your Categories</h5>
@@ -69,7 +90,10 @@ export default function Categories() {
                     <td>{c.name}</td>
                     <td>{(c.fields || []).map((f) => f.label).join(', ')}</td>
                     <td className="text-end">
-                      <button className="btn btn-sm btn-outline-danger" onClick={() => deleteCategory(c._id)}>
+                      <button className="btn btn-sm btn-primary me-2" onClick={() => setEditingCategory(c)}>
+                        Edit
+                      </button>
+                      <button className="btn btn-sm btn-danger" onClick={() => deleteCategory(c._id)}>
                         Delete
                       </button>
                     </td>

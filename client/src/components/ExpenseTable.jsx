@@ -3,6 +3,7 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
     const direction = sort.key === key && sort.direction === 'asc' ? 'desc' : 'asc'
     setSort({ key, direction })
   }
+  const totalAmount = expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0)
 
   return (
     <div className="table-responsive">
@@ -29,8 +30,8 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
                 <td className="text-end">{Number(e.amount).toFixed(2)}</td>
                 <td>{e.description}</td>
                 <td>
-                  <button className="btn btn-sm btn-outline-primary me-2" onClick={() => onEdit(e)}>Edit</button>
-                  <button className="btn btn-sm btn-outline-danger" onClick={() => {
+                  <button className="btn btn-sm btn-primary me-2" onClick={() => onEdit(e)}>Edit</button>
+                  <button className="btn btn-sm btn-danger" onClick={() => {
                     if (window.confirm('Delete this expense?')) onDelete(e._id)
                   }}>Delete</button>
                 </td>
@@ -38,6 +39,13 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
             ))
           )}
         </tbody>
+        {expenses.length > 0 && (
+          <tfoot>
+            <tr>
+              <td colSpan={5} className="text-start fw-bold">Total: {totalAmount.toFixed(2)}</td>
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   )

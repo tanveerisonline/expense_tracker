@@ -6,6 +6,7 @@ import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import Categories from './pages/Categories.jsx'
+import BulkDelete from './pages/BulkDelete.jsx'
 import './App.css'
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Navbar />
-        <div className="container py-4">
+        <div className="container p-4">
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
@@ -30,6 +31,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Categories />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bulk-delete"
+              element={
+                <ProtectedRoute>
+                  <BulkDelete />
                 </ProtectedRoute>
               }
             />

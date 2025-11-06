@@ -158,4 +158,42 @@ router.get('/export/pdf', auth, async (req, res) => {
   doc.end()
 })
 
+// Bulk delete expenses by category and date range or last N days
+router.post(
+  '/bulk-delete',
+  auth,
+  [
+    body('categoryId').isString(),
+    body('from').optional().isISO8601(),
+    body('to').optional().isISO8601(),
+    body('days').optional().isInt({ gt: 0, lt: 36500 }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), message: 'Invalid input' })
+    const { categoryId, from, to, days } = req.body
+
+    // Ensure category belongs to user
+    const category = await Category.findOne({ _id: categoryId, userId: req.user.id })
+    if (!category) return res.status(404).json({ message: 'Invalid category' })
+
+    const query = { userId: req.user.id, categoryId }
+    if (days) {
+      const since = new Date(Date.now() - Number(days) * 24 * 60 * 60 * 1000)
+      query.date = { $gte: since }
+    } else if (from && to) {
+      const start = new Date(from)
+      const end = new Date(to)
+      // include entire end day
+      end.setHours(23, 59, 59, 999)
+      query.date = { $gte: start, $lte: end }
+    } else {
+      return res.status(400).json({ message: 'Provide either days or both from and to dates' })
+    }
+
+    const result = await Expense.deleteMany(query)
+    res.json({ deleted: result.deletedCount })
+  }
+)
+
 module.exports = router
