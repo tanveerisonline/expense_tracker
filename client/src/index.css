@@ -54,3 +54,8 @@ button:focus-visible {
 
 /* Ensure app spans full width for Bootstrap grid */
 #root { width: 100%; }
+
+/* Increase bottom space for titles across pages */
+h1, h2, h3, h4, h5, h6 { margin-bottom: 1rem; }
+/* Enforce spacing for Bootstrap card titles regardless of utility classes */
+.card-title { margin-bottom: 1rem !important; }

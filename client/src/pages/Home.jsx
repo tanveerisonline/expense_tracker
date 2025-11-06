@@ -97,6 +97,7 @@ export default function Home() {
   return (
     <div>
       <div className="card card-body mb-4">
+        <h5 className="card-title">Filter</h5>
         <div className="row g-3 align-items-end">
           <div className="col-12 col-md-4">
             <label className="form-label">Search</label>
@@ -136,7 +137,7 @@ export default function Home() {
 
       <div className="card card-body">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-          <h5 className="card-title mb-2 mb-md-0">Expenses</h5>
+          <h5 className="card-title" style={{ marginBottom: '2.2rem' }}>Expenses</h5>
           <div className="mt-1 mt-md-0">
             <span className="fw-bold">Category: {categories.find((c) => c._id === selectedCategoryId)?.name || 'All'}</span>
           </div>

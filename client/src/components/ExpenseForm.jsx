@@ -60,7 +60,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
   return (
     <form onSubmit={handleSubmit} className="card card-body mb-4">
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-        <h5 className="card-title mb-2 mb-md-0">{editingExpense ? 'Edit Expense' : 'Add Expense'}</h5>
+        <h5 className="card-title" style={{ marginBottom: '2.2rem' }}>{editingExpense ? 'Edit Expense' : 'Add Expense'}</h5>
       </div>
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="row g-3">

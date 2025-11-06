@@ -8,6 +8,13 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
   return (
     <div className="table-responsive">
       <table className="table table-striped table-hover align-middle">
+        <colgroup>
+          <col style={{ width: '20%' }} />
+          <col style={{ width: '45%' }} />
+          <col style={{ width: '10%' }} />
+          <col style={{ width: '15%' }} />
+          <col style={{ width: '10%' }} />
+        </colgroup>
         <thead>
           <tr>
             <th onClick={() => toggleSort('itemName')} role="button">Item Name</th>
@@ -26,9 +33,9 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
             expenses.map((e) => (
               <tr key={e._id}>
                 <td>{e.itemName || ''}</td>
-                <td>{e.description}</td>
-                <td>{Number(e.amount).toFixed(2)}</td>
-                <td>{new Date(e.date).toLocaleDateString()}</td>
+                <td className="text-break">{e.description}</td>
+                <td className="text-nowrap">{Number(e.amount).toFixed(2)}</td>
+                <td className="text-nowrap">{new Date(e.date).toLocaleDateString()}</td>
                 <td className="text-end">
                   <div className="d-inline-flex gap-2 justify-content-end">
                     <button className="btn btn-sm btn-primary" onClick={() => onEdit(e)}>Edit</button>
