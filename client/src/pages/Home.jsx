@@ -100,11 +100,11 @@ export default function Home() {
         <h5 className="card-title">Filter</h5>
         <div className="row g-3 align-items-end">
           <div className="col-12 col-md-4">
-            <label className="form-label">Search</label>
+            <label className="form-label fw-bold">Search</label>
             <input className="form-control" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search item, description or amount" />
           </div>
           <div className="col-12 col-md-4">
-            <label className="form-label">Category</label>
+            <label className="form-label fw-bold">Category</label>
             <select className="form-select" value={selectedCategoryId} onChange={(e) => setSelectedCategoryId(e.target.value)}>
               <option value="">All</option>
               {categories.map((c) => (
@@ -113,7 +113,7 @@ export default function Home() {
             </select>
           </div>
           <div className="col-6 col-md-2">
-            <label className="form-label">Page Size</label>
+            <label className="form-label fw-bold">Page Size</label>
             <select className="form-select" value={limit} onChange={(e) => setLimit(Number(e.target.value))}>
               {[10,20,30,40,50,60,90,100].map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
