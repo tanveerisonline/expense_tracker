@@ -12,7 +12,7 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
           <tr>
             <th onClick={() => toggleSort('itemName')} role="button">Item Name</th>
             <th onClick={() => toggleSort('description')} role="button">Description</th>
-            <th className="text-end" onClick={() => toggleSort('amount')} role="button">Amount</th>
+            <th onClick={() => toggleSort('amount')} role="button">Amount</th>
             <th onClick={() => toggleSort('date')} role="button">Date</th>
             <th className="text-end">Actions</th>
           </tr>
@@ -27,7 +27,7 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
               <tr key={e._id}>
                 <td>{e.itemName || ''}</td>
                 <td>{e.description}</td>
-                <td className="text-end">{Number(e.amount).toFixed(2)}</td>
+                <td>{Number(e.amount).toFixed(2)}</td>
                 <td>{new Date(e.date).toLocaleDateString()}</td>
                 <td className="text-end">
                   <div className="d-inline-flex gap-2 justify-content-end">
