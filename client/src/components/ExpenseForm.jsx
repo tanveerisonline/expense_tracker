@@ -63,7 +63,7 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
         <h5 className="card-title mb-2 mb-md-0">{editingExpense ? 'Edit Expense' : 'Add Expense'}</h5>
         <div className="mt-1 mt-md-0" style={{ minWidth: '240px' }}>
           <label className="form-label mb-1 fw-bold">Category</label>
-          <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required style={{ border: '2px solid #000', fontWeight: 'bold' }}>
+          <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
             <option value="">Select category</option>
             {categories.map((c) => (
               <option key={c._id} value={c._id}>{c.name}</option>
