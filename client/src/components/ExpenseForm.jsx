@@ -131,10 +131,10 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
           ))}
         </div>
       ) : null}
-      <div className="mt-3 d-flex d-md-inline-flex w-100 gap-2">
-        <button className="btn btn-success flex-fill" type="submit" disabled={loading}>{loading ? 'Saving...' : editingExpense ? 'Update' : 'Add'}</button>
+      <div className="mt-3 d-flex d-md-inline-flex gap-2">
+        <button className="btn btn-success btn-sm" type="submit" disabled={loading}>{loading ? 'Saving...' : editingExpense ? 'Update' : 'Add'}</button>
         {editingExpense && (
-          <button type="button" className="btn btn-secondary flex-fill flex-md-grow-0" onClick={() => {
+          <button type="button" className="btn btn-secondary btn-sm flex-fill flex-md-grow-0" onClick={() => {
             setAmount('')
             setDate('')
             setDescription('')

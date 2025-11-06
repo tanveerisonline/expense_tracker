@@ -46,36 +46,53 @@
 @media (max-width: 576px) {
   .btn { padding: 0.6rem 0.85rem; font-size: 0.95rem; }
   .btn.btn-sm { padding: 0.55rem 0.8rem; font-size: 0.9rem; }
-  .form-control, .form-select { min-height: 44px; }
+  .form-control, .form-select { min-height: 44px; font-size: 1rem; line-height: 1.35; }
   .pagination .page-link { min-width: 44px; min-height: 44px; line-height: 1.35; padding: 0.55rem 0.8rem; }
   .table { table-layout: auto; }
   /* Let cell content wrap, but keep headers on one line to avoid letter stacking */
-  .table td { padding: 0.6rem; word-break: break-word; overflow-wrap: break-word; }
+  .table td { padding: 0.6rem; word-break: break-word; overflow-wrap: anywhere; }
   .table th { padding: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .navbar .nav-link { padding: 0.7rem 1rem; }
   /* Make action buttons easier to tap and allow wrapping */
-  .actions-cell { min-width: 160px; }
-  .actions-cell .d-inline-flex, .actions-cell .d-flex { flex-wrap: nowrap !important; gap: 0.4rem !important; }
+  .actions-cell { min-width: auto; white-space: normal; }
+  .actions-cell .d-inline-flex, .actions-cell .d-flex { flex-wrap: wrap !important; gap: 0.5rem !important; justify-content: flex-end; }
   .actions-cell .btn.btn-sm { min-height: 36px; white-space: nowrap; padding: 0.45rem 0.6rem; font-size: 0.88rem; }
   /* Increase touch target heights to meet accessibility guidelines */
-  .form-control, .form-select { min-height: 48px; }
+  .form-control, .form-select { min-height: 44px; }
 }
 
+/* Expenses table: fixed layout for consistent widths across states */
+.expenses-table { table-layout: fixed; }
+.expenses-table th, .expenses-table td { vertical-align: middle; }
+.actions-cell { white-space: nowrap; }
+
 /* Column width rules (desktop/default) driven by table classes */
-.equal-cols-6 col { width: 16.6667%; }
-.wide-cols-5 col:nth-child(1) { width: 20%; }
-.wide-cols-5 col:nth-child(2) { width: 45%; }
-.wide-cols-5 col:nth-child(3) { width: 10%; }
-.wide-cols-5 col:nth-child(4) { width: 15%; }
-.wide-cols-5 col:nth-child(5) { width: 10%; }
+/* When category column is present (6 cols) */
+.equal-cols-6 col:nth-child(1) { width: 20%; } /* Item */
+.equal-cols-6 col:nth-child(2) { width: 35%; } /* Description */
+.equal-cols-6 col:nth-child(3) { width: 15%; } /* Category */
+.equal-cols-6 col:nth-child(4) { width: 10%; } /* Amount */
+.equal-cols-6 col:nth-child(5) { width: 10%; } /* Date */
+.equal-cols-6 col:nth-child(6) { width: 10%; } /* Actions */
+
+/* When category column is hidden (5 cols), keep shared columns consistent;
+   allocate the missing 15% to Description for readability */
+.wide-cols-5 col:nth-child(1) { width: 20%; } /* Item */
+.wide-cols-5 col:nth-child(2) { width: 50%; } /* Description (35 + 15) */
+.wide-cols-5 col:nth-child(3) { width: 10%; } /* Amount */
+.wide-cols-5 col:nth-child(4) { width: 10%; } /* Date */
+.wide-cols-5 col:nth-child(5) { width: 10%; } /* Actions */
 
 /* On small screens, let columns auto-size and preserve actions space */
 @media (max-width: 576px) {
   .equal-cols-6 col, .wide-cols-5 col { width: auto; }
 }
 
-/* Smooth scrolling inside table wrappers on mobile */
-.table-responsive { -webkit-overflow-scrolling: touch; }
+/* Table wrapper: no horizontal scrollbar on laptop/desktop; enable on mobile */
+.table-responsive { -webkit-overflow-scrolling: touch; overflow-x: visible; }
+@media (max-width: 768px) {
+  .table-responsive { overflow-x: auto; }
+}
 
 /* Payments page: responsive actions and summary boxes */
 .payments-form .actions-cell { flex-wrap: nowrap; }
@@ -85,3 +102,59 @@
 }
 .summary-boxes { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 .summary-boxes > div { flex: 1 1 180px; }
+
+/* Pagination: match green styling with Add button (btn-success semantics) */
+/* Page number buttons: green */
+.pagination .page-item:not(.prev):not(.next) .page-link {
+  background-color: #198754; /* Bootstrap success */
+  border-color: #198754;
+  color: #fff;
+}
+.pagination .page-item:not(.prev):not(.next) .page-link:hover,
+.pagination .page-item:not(.prev):not(.next) .page-link:focus {
+  background-color: #157347;
+  border-color: #157347;
+  color: #fff;
+}
+.pagination .page-item.active:not(.prev):not(.next) .page-link {
+  background-color: #146c43;
+  border-color: #146c43;
+  color: #fff;
+}
+/* Prev/Next buttons: match Export PDF (warning/yellow) */
+.pagination .prev .page-link {
+  background-color: #0d6efd; /* Bootstrap primary (match Export CSV) */
+  border-color: #0d6efd;
+  color: #fff;
+}
+.pagination .prev .page-link:hover,
+.pagination .prev .page-link:focus {
+  background-color: #0b5ed7;
+  border-color: #0b5ed7;
+  color: #fff;
+}
+.pagination .next .page-link {
+  background-color: #ffc107; /* Bootstrap warning (match Export PDF) */
+  border-color: #ffc107;
+  color: #212529;
+}
+.pagination .next .page-link:hover,
+.pagination .next .page-link:focus {
+  background-color: #ffca2c;
+  border-color: #ffca2c;
+  color: #212529;
+}
+.pagination .page-item.disabled .page-link {
+  background-color: #6c757d; /* gray for disabled for contrast */
+  border-color: #6c757d;
+  color: #fff;
+}
+.pagination-count { margin-left: 0.5rem; }
+@media (max-width: 576px) {
+  .pagination-count { width: 100%; text-align: right; margin-top: 0.5rem; }
+}
+/* Medium-sized Add button */
+.btn-add { padding: 0.5rem 1rem; font-size: 1rem; }
+@media (max-width: 576px) {
+  .btn-add { padding: 0.5rem 1rem; font-size: 1rem; }
+}

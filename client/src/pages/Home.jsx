@@ -203,21 +203,24 @@ export default function Home() {
               showCategoryColumn={!selectedCategoryId}
               summaryInfo={selectedCategoryId ? summaryInfo : null}
             />
-            <nav>
-              <ul className="pagination">
-                <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
-                  <button className="page-link" onClick={() => setPage((p) => Math.max(1, p - 1))}>Previous</button>
-                </li>
-                {Array.from({ length: pages }, (_, i) => i + 1).slice(0, 10).map((p) => (
-                  <li className={`page-item ${page === p ? 'active' : ''}`} key={p}>
-                    <button className="page-link" onClick={() => setPage(p)}>{p}</button>
+            <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <nav>
+                <ul className="pagination mb-0">
+                  <li className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
+                    <button type="button" className="page-link" aria-label="Previous page" onClick={() => setPage((p) => Math.max(1, p - 1))}>Previous</button>
                   </li>
-                ))}
-                <li className={`page-item ${page >= pages ? 'disabled' : ''}`}>
-                  <button className="page-link" onClick={() => setPage((p) => Math.min(pages, p + 1))}>Next</button>
-                </li>
-              </ul>
-            </nav>
+                  {Array.from({ length: pages }, (_, i) => i + 1).slice(0, 10).map((p) => (
+                    <li className={`page-item ${page === p ? 'active' : ''}`} key={p}>
+                      <button type="button" className="page-link" aria-current={page === p ? 'page' : undefined} onClick={() => setPage(p)}>{p}</button>
+                    </li>
+                  ))}
+                  <li className={`page-item next ${page >= pages ? 'disabled' : ''}`}>
+                    <button type="button" className="page-link" aria-label="Next page" onClick={() => setPage((p) => Math.min(pages, p + 1))}>Next</button>
+                  </li>
+                </ul>
+              </nav>
+              <div className="pagination-count text-muted">Total: {total} items</div>
+            </div>
           </>
         )}
       </div>

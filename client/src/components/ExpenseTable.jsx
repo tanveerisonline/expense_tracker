@@ -7,7 +7,7 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
 
   return (
     <div className="table-responsive">
-      <table className="table table-striped table-hover align-middle">
+      <table className="table table-striped table-hover align-middle expenses-table">
         {showCategoryColumn ? (
           <colgroup className="equal-cols-6">
             <col /><col /><col /><col /><col /><col />
@@ -19,11 +19,11 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
         )}
         <thead>
           <tr>
-            <th onClick={() => toggleSort('itemName')} role="button">Item Name</th>
-            <th onClick={() => toggleSort('description')} role="button">Description</th>
-            {showCategoryColumn && <th>Category</th>}
-            <th onClick={() => toggleSort('amount')} role="button">Amount</th>
-            <th onClick={() => toggleSort('date')} role="button">Date</th>
+            <th scope="col" onClick={() => toggleSort('itemName')} role="button">Item Name</th>
+            <th scope="col" onClick={() => toggleSort('description')} role="button">Description</th>
+            {showCategoryColumn && <th scope="col">Category</th>}
+            <th scope="col" onClick={() => toggleSort('amount')} role="button" className="text-nowrap">Amount</th>
+            <th scope="col" onClick={() => toggleSort('date')} role="button" className="text-nowrap">Date</th>
             <th className="text-end actions-cell">Actions</th>
           </tr>
         </thead>
@@ -35,13 +35,13 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
           ) : (
             expenses.map((e) => (
               <tr key={e._id}>
-                <td>{e.itemName || ''}</td>
+                <td className="text-break">{e.itemName || ''}</td>
                 <td className="text-break">{e.description}</td>
                 {showCategoryColumn && <td className="text-break">{e.category?.name || ''}</td>}
                 <td className="text-nowrap">{Number(e.amount).toFixed(2)}</td>
                 <td className="text-nowrap">{new Date(e.date).toLocaleDateString()}</td>
                 <td className="text-end actions-cell">
-                  <div className="d-inline-flex gap-2 justify-content-end flex-wrap">
+                  <div className="d-inline-flex gap-2 justify-content-end" aria-label="Actions">
                     <button className="btn btn-sm btn-primary" onClick={() => onEdit(e)}>Edit</button>
                     <button className="btn btn-sm btn-danger" onClick={() => {
                       if (window.confirm('Delete this expense?')) onDelete(e._id)
