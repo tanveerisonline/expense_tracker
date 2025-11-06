@@ -50,12 +50,12 @@
   .pagination .page-link { min-width: 44px; min-height: 44px; line-height: 1.35; padding: 0.55rem 0.8rem; }
   .table { table-layout: auto; }
   /* Let cell content wrap, but keep headers on one line to avoid letter stacking */
-  .table td { padding: 0.6rem; word-break: break-word; overflow-wrap: anywhere; }
+  .table td { padding: 0.6rem; word-break: break-word; overflow-wrap: break-word; }
   .table th { padding: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .navbar .nav-link { padding: 0.7rem 1rem; }
   /* Make action buttons easier to tap and allow wrapping */
-  .actions-cell { min-width: auto; white-space: normal; }
-  .actions-cell .d-inline-flex, .actions-cell .d-flex { flex-wrap: wrap !important; gap: 0.5rem !important; justify-content: flex-end; }
+  .actions-cell { min-width: 160px; white-space: nowrap; }
+  .actions-cell .d-inline-flex, .actions-cell .d-flex { flex-wrap: nowrap !important; gap: 0.5rem !important; justify-content: flex-end; }
   .actions-cell .btn.btn-sm { min-height: 36px; white-space: nowrap; padding: 0.45rem 0.6rem; font-size: 0.88rem; }
   /* Increase touch target heights to meet accessibility guidelines */
   .form-control, .form-select { min-height: 44px; }
@@ -83,15 +83,22 @@
 .wide-cols-5 col:nth-child(4) { width: 10%; } /* Date */
 .wide-cols-5 col:nth-child(5) { width: 10%; } /* Actions */
 
-/* On small screens, let columns auto-size and preserve actions space */
-@media (max-width: 576px) {
-  .equal-cols-6 col, .wide-cols-5 col { width: auto; }
-}
+/* On small screens, keep desktop column widths; let container scroll */
+/* Removed auto-width override to avoid overlap; horizontal scroll will handle overflow */
 
 /* Table wrapper: no horizontal scrollbar on laptop/desktop; enable on mobile */
 .table-responsive { -webkit-overflow-scrolling: touch; overflow-x: visible; }
 @media (max-width: 768px) {
   .table-responsive { overflow-x: auto; }
+}
+
+/* Mobile-specific table min width to enable horizontal scrolling */
+@media (max-width: 576px) {
+  .expenses-table { min-width: 720px; }
+  /* Keep numeric/date columns on one line for readability */
+  .expenses-table th, .expenses-table td { white-space: nowrap; }
+  /* Allow long text columns to wrap */
+  .expenses-table td.text-break { white-space: normal; }
 }
 
 /* Payments page: responsive actions and summary boxes */
