@@ -30,10 +30,12 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
                 <td className="text-end">{Number(e.amount).toFixed(2)}</td>
                 <td>{e.description}</td>
                 <td>
-                  <button className="btn btn-sm btn-primary me-2" onClick={() => onEdit(e)}>Edit</button>
-                  <button className="btn btn-sm btn-danger" onClick={() => {
-                    if (window.confirm('Delete this expense?')) onDelete(e._id)
-                  }}>Delete</button>
+                  <div className="d-flex d-md-block gap-2 w-100">
+                    <button className="btn btn-sm btn-primary flex-fill me-md-2" onClick={() => onEdit(e)}>Edit</button>
+                    <button className="btn btn-sm btn-danger flex-fill" onClick={() => {
+                      if (window.confirm('Delete this expense?')) onDelete(e._id)
+                    }}>Delete</button>
+                  </div>
                 </td>
               </tr>
             ))

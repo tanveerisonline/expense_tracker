@@ -90,12 +90,14 @@ export default function Categories() {
                     <td>{c.name}</td>
                     <td>{(c.fields || []).map((f) => f.label).join(', ')}</td>
                     <td className="text-end">
-                      <button className="btn btn-sm btn-primary me-2" onClick={() => setEditingCategory(c)}>
-                        Edit
-                      </button>
-                      <button className="btn btn-sm btn-danger" onClick={() => deleteCategory(c._id)}>
-                        Delete
-                      </button>
+                      <div className="d-flex d-md-inline-flex gap-2 w-100 justify-content-md-end">
+                        <button className="btn btn-sm btn-primary flex-fill flex-md-grow-0 me-md-2" onClick={() => setEditingCategory(c)}>
+                          Edit
+                        </button>
+                        <button className="btn btn-sm btn-danger flex-fill flex-md-grow-0" onClick={() => deleteCategory(c._id)}>
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
