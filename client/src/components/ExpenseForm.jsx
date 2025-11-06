@@ -75,7 +75,15 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
         </div>
         <div className="col-md-3">
           <label className="form-label">Date</label>
-          <input type="date" className="form-control" value={date} onChange={(e) => setDate(e.target.value)} required />
+          <input
+            type="date"
+            className="form-control"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+            onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch (_) {} }}
+            onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch (_) {} }}
+          />
         </div>
         <div className="col-md-3">
           <label className="form-label">Description</label>

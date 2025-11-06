@@ -82,11 +82,25 @@ export default function BulkDelete() {
             <div className="row g-3 mt-1">
               <div className="col-12 col-md-4">
                 <label className="form-label">From</label>
-                <input type="date" className="form-control" value={deleteFrom} onChange={(e) => setDeleteFrom(e.target.value)} />
+                <input
+                  type="date"
+                  className="form-control"
+                  value={deleteFrom}
+                  onChange={(e) => setDeleteFrom(e.target.value)}
+                  onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch (_) {} }}
+                  onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch (_) {} }}
+                />
               </div>
               <div className="col-12 col-md-4">
                 <label className="form-label">To</label>
-                <input type="date" className="form-control" value={deleteTo} onChange={(e) => setDeleteTo(e.target.value)} />
+                <input
+                  type="date"
+                  className="form-control"
+                  value={deleteTo}
+                  onChange={(e) => setDeleteTo(e.target.value)}
+                  onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch (_) {} }}
+                  onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch (_) {} }}
+                />
               </div>
               <div className="col-12 col-md-4 d-flex align-items-end">
                 <button className="btn btn-danger w-100" onClick={bulkDelete} disabled={loading}>{loading ? 'Deleting...' : 'Delete Records'}</button>
