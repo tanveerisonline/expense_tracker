@@ -57,6 +57,8 @@
   .actions-cell { min-width: 160px; }
   .actions-cell .d-inline-flex, .actions-cell .d-flex { flex-wrap: nowrap !important; gap: 0.4rem !important; }
   .actions-cell .btn.btn-sm { min-height: 36px; white-space: nowrap; padding: 0.45rem 0.6rem; font-size: 0.88rem; }
+  /* Increase touch target heights to meet accessibility guidelines */
+  .form-control, .form-select { min-height: 48px; }
 }
 
 /* Column width rules (desktop/default) driven by table classes */
@@ -71,3 +73,15 @@
 @media (max-width: 576px) {
   .equal-cols-6 col, .wide-cols-5 col { width: auto; }
 }
+
+/* Smooth scrolling inside table wrappers on mobile */
+.table-responsive { -webkit-overflow-scrolling: touch; }
+
+/* Payments page: responsive actions and summary boxes */
+.payments-form .actions-cell { flex-wrap: nowrap; }
+@media (max-width: 576px) {
+  .payments-form .actions-cell { width: 100%; display: flex; gap: 0.6rem; }
+  .payments-form .actions-cell .btn { flex: 1 1 50%; }
+}
+.summary-boxes { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.summary-boxes > div { flex: 1 1 180px; }

@@ -90,7 +90,7 @@ export default function PaymentManager({ categories }) {
 
       {summary && (
         <div className="mb-3">
-          <div className="d-flex flex-column flex-md-row gap-3">
+          <div className="summary-boxes d-flex flex-column flex-md-row gap-3">
             <div className="p-3 border rounded"><div className="fw-bold">Total</div><div>{summary.totalExpenses?.toFixed(2)}</div></div>
             <div className="p-3 border rounded"><div className="fw-bold">Amount Paid</div><div>{summary.totalPaid?.toFixed(2)}</div></div>
             <div className="p-3 border rounded"><div className="fw-bold">Balance</div><div className="text-danger fw-bold">{outstanding.toFixed(2)}</div></div>
@@ -102,7 +102,7 @@ export default function PaymentManager({ categories }) {
       )}
 
       {summary && (
-        <form onSubmit={submitPayment} className="mb-3">
+        <form onSubmit={submitPayment} className="mb-3 payments-form">
           <div className="row g-3 align-items-end">
             <div className="col-12 col-md-3">
               <label className="form-label">Amount</label>
