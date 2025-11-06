@@ -1,4 +1,5 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const { body, validationResult } = require('express-validator')
 const auth = require('../middleware/auth')
 const Expense = require('../models/Expense')
@@ -32,12 +33,16 @@ router.post(
 router.get('/summary', auth, async (req, res) => {
   const { categoryId } = req.query
   const userId = req.user.id
+  // Ensure ObjectId matching for aggregation
+  const uid = new mongoose.Types.ObjectId(userId)
 
-  const expenseMatch = { userId }
-  const paymentMatch = { userId }
+  const expenseMatch = { userId: uid }
+  const paymentMatch = { userId: uid }
   if (categoryId) {
-    expenseMatch.categoryId = categoryId
-    paymentMatch.categoryId = categoryId
+    // Cast to ObjectId for aggregation $match to work correctly
+    const cid = new mongoose.Types.ObjectId(categoryId)
+    expenseMatch.categoryId = cid
+    paymentMatch.categoryId = cid
   }
 
   // Aggregate totals by category

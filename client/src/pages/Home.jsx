@@ -22,6 +22,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState(null)
   const formRef = useRef(null)
+  // Payments summary for selected category
+  const [summaryInfo, setSummaryInfo] = useState(null)
   // Charts removed: stats state eliminated
 
   // Seed default categories for the user if missing
@@ -48,6 +50,28 @@ export default function Home() {
       const { data } = await api.get(`/expenses?${params.toString()}`)
       setExpenses(data.items)
       setTotal(data.total)
+      // Load payments summary for the selected category to show Amount Paid and Balance
+      if (selectedCategoryId) {
+        try {
+          const { data: ps } = await api.get(`/payments/summary?categoryId=${selectedCategoryId}`)
+          const s = ps.summary?.[0]
+          const latestPaymentDate = ps.payments?.[0]?.date || null
+          if (s) {
+            setSummaryInfo({
+              paidTotal: s.totalPaid || 0,
+              paidDate: latestPaymentDate,
+              balanceLeft: Math.max(0, (s.totalExpenses || 0) - (s.totalPaid || 0)),
+              balanceDate: new Date().toISOString(),
+            })
+          } else {
+            setSummaryInfo({ paidTotal: 0, paidDate: null, balanceLeft: 0, balanceDate: new Date().toISOString() })
+          }
+        } catch (e) {
+          setSummaryInfo(null)
+        }
+      } else {
+        setSummaryInfo(null)
+      }
     } finally {
       setLoading(false)
     }
@@ -62,6 +86,19 @@ export default function Home() {
   useEffect(() => {
     loadExpenses()
   }, [page, limit, selectedCategoryId, search, sort])
+
+  // Listen for payments updates (from Payments page) to refresh totals/balances instantly
+  useEffect(() => {
+    const handler = (evt) => {
+      const cid = evt?.detail?.categoryId
+      // Refresh only if the event relates to the currently selected category
+      if (!cid || cid === selectedCategoryId) {
+        loadExpenses()
+      }
+    }
+    window.addEventListener('payments-updated', handler)
+    return () => window.removeEventListener('payments-updated', handler)
+  }, [selectedCategoryId, page, limit, search, sort])
 
   const handleAddOrUpdate = async (payload) => {
     if (editing) {
@@ -162,6 +199,7 @@ export default function Home() {
               sort={sort}
               setSort={setSort}
               showCategoryColumn={!selectedCategoryId}
+              summaryInfo={selectedCategoryId ? summaryInfo : null}
             />
             <nav>
               <ul className="pagination">

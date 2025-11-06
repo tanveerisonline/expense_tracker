@@ -9,6 +9,7 @@ export default function PaymentManager({ categories }) {
   const [payments, setPayments] = useState([])
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState('')
+  const [note, setNote] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -36,11 +37,18 @@ export default function PaymentManager({ categories }) {
     if (categoryId) loadSummary(categoryId)
   }, [categoryId])
 
-  const outstanding = Math.max(0, (summary?.totalExpenses || 0) - (summary?.totalPaid || 0))
+  const outstanding = typeof summary?.balance === 'number'
+    ? summary.balance
+    : Math.max(0, (summary?.totalExpenses || 0) - (summary?.totalPaid || 0))
 
   const payFull = () => {
     setAmount(String(outstanding || 0))
     setDate(new Date().toISOString().slice(0, 10))
+  }
+
+  const populateToday = () => {
+    const today = new Date().toISOString().slice(0, 10)
+    setDate(today)
   }
 
   const submitPayment = async (e) => {
@@ -51,10 +59,13 @@ export default function PaymentManager({ categories }) {
     setLoading(true)
     setError('')
     try {
-      await api.post('/payments', { categoryId, amount: num, date }, { headers: { 'X-CSRF-Token': csrfToken } })
+      await api.post('/payments', { categoryId, amount: num, date, note }, { headers: { 'X-CSRF-Token': csrfToken } })
       setAmount('')
       setDate('')
+      setNote('')
       await loadSummary(categoryId)
+      // Notify other pages (Home) to refresh totals and balances immediately
+      window.dispatchEvent(new CustomEvent('payments-updated', { detail: { categoryId } }))
     } catch (e) {
       setError(e?.response?.data?.message || 'Failed to add payment')
     } finally {
@@ -99,7 +110,11 @@ export default function PaymentManager({ categories }) {
             </div>
             <div className="col-12 col-md-3">
               <label className="form-label">Date</label>
-              <input className="form-control" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              <input className="form-control" type="date" value={date} readOnly onClick={populateToday} onFocus={populateToday} />
+            </div>
+            <div className="col-12 col-md-3">
+              <label className="form-label">Note</label>
+              <input className="form-control" type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional note" />
             </div>
             <div className="col-12 col-md-3 d-flex gap-2 actions-cell">
               <button type="button" className="btn btn-warning btn-sm" onClick={payFull} disabled={!outstanding}>Pay Full</button>

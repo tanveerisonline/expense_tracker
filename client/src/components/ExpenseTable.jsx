@@ -1,4 +1,4 @@
-export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort, showCategoryColumn = false }) {
+export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort, showCategoryColumn = false, summaryInfo = null }) {
   const toggleSort = (key) => {
     const direction = sort.key === key && sort.direction === 'asc' ? 'desc' : 'asc'
     setSort({ key, direction })
@@ -57,6 +57,26 @@ export default function ExpenseTable({ expenses, onEdit, onDelete, sort, setSort
             <tr>
               <td colSpan={showCategoryColumn ? 6 : 5} className="text-start fw-bold">Total: {totalAmount.toFixed(2)}</td>
             </tr>
+            {summaryInfo && (
+              <>
+                <tr>
+                  <td colSpan={showCategoryColumn ? 6 : 5} className="text-start">
+                    <span className="fw-bold">Amount Paid:</span> {Number(summaryInfo.paidTotal || 0).toFixed(2)}
+                    {summaryInfo.paidDate && (
+                      <span className="text-muted ms-2">on {new Date(summaryInfo.paidDate).toLocaleDateString()}</span>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={showCategoryColumn ? 6 : 5} className="text-start">
+                    <span className="fw-bold">Balance Left:</span> {Number(summaryInfo.balanceLeft || 0).toFixed(2)}
+                    {summaryInfo.balanceDate && (
+                      <span className="text-muted ms-2">as of {new Date(summaryInfo.balanceDate).toLocaleDateString()}</span>
+                    )}
+                  </td>
+                </tr>
+              </>
+            )}
           </tfoot>
         )}
       </table>
