@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import ExpenseForm from '../components/ExpenseForm'
@@ -27,18 +27,20 @@ export default function Home() {
   // Charts removed: stats state eliminated
 
   // Seed default categories for the user if missing
-  const seedDefaults = async () => {
+  const seedDefaults = useCallback(async () => {
     try {
       await api.post('/categories/seed-default', { names: PREDEFINED_CATEGORIES }, { headers: { 'X-CSRF-Token': csrfToken } })
-    } catch (e) {}
-  }
+    } catch {
+      // Seed failure is non-critical
+    }
+  }, [csrfToken])
 
-  const loadCategories = async () => {
+  const loadCategories = useCallback(async () => {
     const { data } = await api.get('/categories')
     setCategories(data.categories)
-  }
+  }, [])
 
-  const loadExpenses = async () => {
+  const loadExpenses = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -66,7 +68,7 @@ export default function Home() {
           } else {
             setSummaryInfo({ paidTotal: 0, paidDate: null, balanceLeft: 0, balanceDate: new Date().toISOString() })
           }
-        } catch (e) {
+        } catch {
           setSummaryInfo(null)
         }
       } else {
@@ -75,17 +77,17 @@ export default function Home() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page, limit, sort, selectedCategoryId, search])
 
   // Charts removed: loadStats eliminated
 
   useEffect(() => {
     seedDefaults().then(() => loadCategories())
-  }, [])
+  }, [seedDefaults, loadCategories])
 
   useEffect(() => {
     loadExpenses()
-  }, [page, limit, selectedCategoryId, search, sort])
+  }, [loadExpenses])
 
   // Listen for payments updates (from Payments page) to refresh totals/balances instantly
   useEffect(() => {
@@ -98,7 +100,7 @@ export default function Home() {
     }
     window.addEventListener('payments-updated', handler)
     return () => window.removeEventListener('payments-updated', handler)
-  }, [selectedCategoryId, page, limit, search, sort])
+  }, [selectedCategoryId, loadExpenses])
 
   const handleAddOrUpdate = async (payload) => {
     if (editing) {
