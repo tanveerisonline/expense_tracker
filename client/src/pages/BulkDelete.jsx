@@ -87,8 +87,8 @@ export default function BulkDelete() {
                   className="form-control"
                   value={deleteFrom}
                   onChange={(e) => setDeleteFrom(e.target.value)}
-                  onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch (_) {} }}
-                  onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch (_) {} }}
+                  onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch { /* showPicker not supported */ } }}
+                  onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch { /* showPicker not supported */ } }}
                 />
               </div>
               <div className="col-12 col-md-4">
@@ -98,8 +98,8 @@ export default function BulkDelete() {
                   className="form-control"
                   value={deleteTo}
                   onChange={(e) => setDeleteTo(e.target.value)}
-                  onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch (_) {} }}
-                  onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch (_) {} }}
+                  onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch { /* showPicker not supported */ } }}
+                  onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch { /* showPicker not supported */ } }}
                 />
               </div>
               <div className="col-12 col-md-4 d-flex align-items-end">
