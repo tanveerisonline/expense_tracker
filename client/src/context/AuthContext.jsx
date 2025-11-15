@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useMemo } from 'react'
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import api from '../services/api'
 
 const AuthContext = createContext(null)
@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
           headers: { 'X-CSRF-Token': csrf.csrfToken },
         })
         setUser(data.user || null)
-      } catch (err) {
+      } catch {
         setUser(null)
       } finally {
         setLoading(false)
@@ -27,37 +27,38 @@ export function AuthProvider({ children }) {
     init()
   }, [])
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     const { data } = await api.post(
       '/auth/login',
       { email, password },
       { headers: { 'X-CSRF-Token': csrfToken } }
     )
     setUser(data.user)
-  }
+  }, [csrfToken])
 
-  const signup = async (name, email, password) => {
+  const signup = useCallback(async (name, email, password) => {
     const { data } = await api.post(
       '/auth/signup',
       { name, email, password },
       { headers: { 'X-CSRF-Token': csrfToken } }
     )
     setUser(data.user)
-  }
+  }, [csrfToken])
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await api.post('/auth/logout', {}, { headers: { 'X-CSRF-Token': csrfToken } })
     setUser(null)
-  }
+  }, [csrfToken])
 
   const value = useMemo(
     () => ({ user, setUser, loading, login, signup, logout, csrfToken }),
-    [user, loading, csrfToken]
+    [user, loading, login, signup, logout, csrfToken]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext)
 }

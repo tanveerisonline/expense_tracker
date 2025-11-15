@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 
@@ -13,7 +13,7 @@ export default function PaymentManager({ categories }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const loadSummary = async (cid) => {
+  const loadSummary = useCallback(async (cid) => {
     if (!cid) { setSummary(null); setPayments([]); return }
     try {
       const { data } = await api.get(`/payments/summary?categoryId=${cid}`)
@@ -31,11 +31,11 @@ export default function PaymentManager({ categories }) {
       setPayments([])
       setError(e?.response?.data?.message || 'Failed to load summary')
     }
-  }
+  }, [categories])
 
   useEffect(() => {
     if (categoryId) loadSummary(categoryId)
-  }, [categoryId])
+  }, [categoryId, loadSummary])
 
   const outstanding = typeof summary?.balance === 'number'
     ? summary.balance
@@ -44,11 +44,6 @@ export default function PaymentManager({ categories }) {
   const payFull = () => {
     setAmount(String(outstanding || 0))
     setDate(new Date().toISOString().slice(0, 10))
-  }
-
-  const populateToday = () => {
-    const today = new Date().toISOString().slice(0, 10)
-    setDate(today)
   }
 
   const submitPayment = async (e) => {
@@ -116,8 +111,8 @@ export default function PaymentManager({ categories }) {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
-                onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch (_) {} }}
-                onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch (_) {} }}
+                onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch { /* showPicker not supported */ } }}
+                onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch { /* showPicker not supported */ } }}
               />
             </div>
             <div className="col-12 col-md-3">

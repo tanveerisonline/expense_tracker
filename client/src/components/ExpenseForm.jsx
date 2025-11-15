@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { validateAmount } from '../utils/validation'
 
-export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, editingExpense, loading }) {
+export default function ExpenseForm({ categories, onSubmit, editingExpense, loading }) {
   const [categoryId, setCategoryId] = useState('')
   const [itemName, setItemName] = useState('')
   const [amount, setAmount] = useState('')
@@ -80,8 +80,8 @@ export default function ExpenseForm({ categories, selectedCategoryId, onSubmit, 
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch (_) {} }}
-            onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch (_) {} }}
+            onFocus={(e) => { try { e.target.showPicker && e.target.showPicker() } catch { /* showPicker not supported */ } }}
+            onMouseDown={(e) => { try { if (e.target.showPicker) { e.preventDefault(); e.target.showPicker() } } catch { /* showPicker not supported */ } }}
           />
         </div>
         <div className="col-12 col-md-6 col-lg-3">
